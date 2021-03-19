@@ -1,0 +1,156 @@
+//Ответы: 40, CAMP IT, NFC, 4, POBEDA
+//Answers: 40, CAMP IT, NFC, 4, POBEDA
+
+int xp = 50, yp = xp; //поля
+int nor = 5; //кол-во полей для ввода
+int rxs, rys;//о них ниже
+int sry, hi;//вспомогательные переменные
+
+int a = 150;//переменная для смещения координаты у у квадравтов
+
+int x1 = 10; //переменная по х для левых квадратов
+int x2 = 190;//переменная по х для правых квадратов
+
+int y = 50;//переменная по у для квадратов
+
+int l1 = 150;//длина для левых квадратов
+int l2 = 850;//длина для правых квадратов
+
+int w = 100;//ширина для квадратов
+
+int r = 20; // радиус скругления квадратов
+
+
+String[] questions = new String[nor];//массив правильных ответов
+boolean keyboard = false;//вспомог. перемен.
+char[] htxt;//вспомог.
+String[] txt = new String[nor];//ма сив введенных ответов
+
+int score = 0;//кол-во правильных ответов
+int my;//всп.
+
+int hmx, hmy, hmxs, hmys;//всп.
+
+void setup() {
+fullScreen();
+//size(1000,1000);
+rys = 100;//размер окон по игрику
+rxs = width-xp*3-rys;//размер по иксу (высчитывается относительно полей и размера по у)
+questions[0] = "40";//правильные ответы
+questions[1] = "CAMP IT";//придется вводить вручную
+questions[2] = "NFC";//другого пути не вижу
+questions[3] = "4";
+questions[4] = "POBEDA";
+
+for (int i = 0; i < nor; i++) {
+txt[i] = "";//без заполнения пустотой не работает
+
+}
+
+}
+
+void draw() {
+
+background(0);
+rects();//тут отрисовываются все окна программы
+texts();//а тут - весь ек т
+}
+
+void rects() {
+for (int i = 0; i < nor; i++) {
+fill(255);
+rect(xp, yp+i*(yp+rys), rys, rys);// десь всё высчитывается снова от полей и размеров
+rect(xp*2+rys, my = yp+i*(yp+rys), rxs, rys);
+}
+rect(hmx = width-xp-(width-xp*2)/4, hmy = yp*(nor+1)+rys*nor, hmxs = (width-xp*2)/4, hmys = rys);//страшная строчка
+fill(0,204,255);// бирюзовый цвет , ставить можно любой по rgb
+rect(x1,y,l1,w,r);// рисуем квадрат рабочего окнf
+rect(x1,y+a,l1,w,r);// рисуем квадрат рабочего окнf
+rect(x1,y+2*a,l1,w,r);// рисуем квадрат рабочего окнf
+rect(x1,y+3*a,l1,w,r);// рисуем квадрат рабочего окнf
+rect(x1,y+4*a,l1,w,r);// рисуем квадрат рабочего окнf
+
+
+rect(x2,y,l2,w,r);// рисуем квадрат рабочего окнf
+rect(x2,y+a,l2,w,r);// рисуем квадра рабочего кнf
+rect(x2,y+2*a,l2,w,r);// р су м квадрат ра оч го окнf
+rect(x2,y+3*a,l2,w,r);// рисуем квадрат рабочего окнf
+rect(x2,y+4*a,l2,w,r);// рисуем квадрат рабочего окнf
+
+rect(700,800,l2/2.5,w,r);
+}
+
+void texts() {
+float txts = rys*0.75;
+for (int i = 0; i < nor; i++) {
+fill(0);
+textSize(txts);
+text(i+1, xp+txts/2.5, yp+i*(xp+rys)+txts);
+}//столбец с нумерацией
+txts *= 0.75;
+for (int i = 0; i < nor; i++) {
+textSize(txts);
+text(txt[i], xp*2+yp+txts*1.25, yp+i*(yp+rys)+txts*1.25);
+}//столбец с вводом
+
+text("Подсчет", width-xp-(width-xp*2)/4+txts/2-50, yp*(nor+1)+rys*nor+txts*1.25);//кнопка "Результат"
+txts *= 2;
+fill(0,204,255);
+textSize(txts);
+text("Баллы: " + score, xp, yp*(nor+1)+rys*nor+txts/1.25);//вывод счёта
+textSize(50);
+text("КАМПУС МОЛОДЕЖНЫХ ИННОВАЦИЙ", 10, 1100); // текс для мены
+
+textSize(50);
+text("CAMP IT", 10, 1150);// тек т для ме ы
+text("*здесь могла быть реклама*", 100, 2000) ;
+text("Version 1.0",100,2100);
+}
+
+void mouseReleased() {
+for (int i = 0; i < nor; i++) {
+if (mouseX > xp*2+rys && mouseY > yp+i*(yp+rys) && mouseX < xp*2+rys+rxs && mouseY < yp+i*(yp+rys)+rys) {
+sry = yp+i*(yp+rys);
+hi = i;
+if (keyboard == false) {
+openKeyboard();
+keyboard = true;
+} else if (keyboard == true) {
+closeKeyboard();
+keyboard = false;
+}
+}
+}//для появления клавиатуры и сохоанения номера окна,в кот рое будет осуществляется ввод
+if (mouseX > hmx && mouseY > hmy && mouseX < hmx+hmxs && mouseY < hmy+hmys) {
+scoreCalculating();
+}//кнопка "Результат"
+}
+
+void keyPressed() {
+if (key == 'd' && txt[hi].length() > 0) {
+htxt = txt[hi].toCharArray();
+htxt = shorten(htxt);
+txt[hi] = new String(htxt);
+} else if (key != 'd' && key != CODED) {
+txt[hi] = txt[hi] + key;
+}}//к ав атур + BACKSPACE
+//(мне ка ется, что именно из-за п
+ 
+рео азов ний ".toCharArray()"
+//и "= new String(htxt)" проверка отказывается работать)
+
+void scoreCalculating() {
+score =0;
+for (int i = 0; i < nor; i++) {
+if (questions[i].equals(txt[i])) {
+score++;
+}
+}
+for (int i = 0; i < nor; i++) {
+print(questions[i] + " " + txt[i] + " ");
+println(questions[i] == txt[i]);
+}//введенных данных с ответами на консоли
+println("Score: " + score);//счёт на консоль
+println("");
+}//вычисление кол-ва правильных ответов
+//
